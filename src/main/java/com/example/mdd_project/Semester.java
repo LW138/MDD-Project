@@ -49,6 +49,13 @@ public class Semester {
     }
 
     public String toString(){
+        String back = this.name + ": Semester-Nr.: " + this.nummer;
+
+
+        return back;
+    }
+
+    public String toCompleteString(){
         String back = this.name + ": Semester-Nr.: " + this.nummer + "; Module: ";
 
         if(this.module.size() >= 1){

@@ -59,6 +59,15 @@ public class Dozent extends Person{
     public String toString(){
         String back = "";
 
+
+        back += this.getVorname() + " " + this.getName();
+        System.out.println(back);
+        return back;
+    }
+
+    public String toCompleteString(){
+        String back = "";
+
         if(this.titel.size() >= 1){
             back += this.titel.toString();
         }

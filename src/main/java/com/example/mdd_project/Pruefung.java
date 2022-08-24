@@ -3,13 +3,13 @@ package com.example.mdd_project;
 import java.util.Date;
 
 public class Pruefung {
-    private Date datum;
+    private String datum;
     private double note;
     private boolean bestanden;
     private String art;
     private int gewichtung;
 
-    public Pruefung(Date datum, double note, boolean bestanden, String art, int gewichtung) {
+    public Pruefung(String datum, double note, boolean bestanden, String art, int gewichtung) {
         this.datum = datum;
         this.note = note;
         this.bestanden = bestanden;
@@ -17,11 +17,11 @@ public class Pruefung {
         this.gewichtung = gewichtung;
     }
 
-    public Date getDatum() {
+    public String getDatum() {
         return datum;
     }
 
-    public void setDatum(Date datum) {
+    public void setDatum(String datum) {
         this.datum = datum;
     }
 

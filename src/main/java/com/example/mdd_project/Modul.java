@@ -10,19 +10,19 @@ public class Modul {
     private String name;
     private int crp;
     private List<Dozent> dozenten;
-    private List<Dozent> veranwortliche;
+    private List<Dozent> verantwortliche;
     private List<Pruefung> pruefungen;
     private Studiengang studiengang;
     private Semester semester;
 
-    public Modul(double note, boolean bestanden, int versuche, String name, int crp, List<Dozent> dozenten, List<Dozent> veranwortliche, List<Pruefung> pruefungen, Studiengang studiengang, Semester semester) {
+    public Modul(double note, boolean bestanden, int versuche, String name, int crp, List<Dozent> dozenten, List<Dozent> verantwortliche, List<Pruefung> pruefungen, Studiengang studiengang, Semester semester) {
         this.note = note;
         this.bestanden = bestanden;
         this.versuche = versuche;
         this.name = name;
         this.crp = crp;
         this.dozenten = dozenten;
-        this.veranwortliche = veranwortliche;
+        this.verantwortliche = verantwortliche;
         this.pruefungen = pruefungen;
         this.studiengang = studiengang;
         this.semester = semester;
@@ -35,8 +35,21 @@ public class Modul {
         this.name = name;
         this.crp = crp;
         this.dozenten = new ArrayList<>();
-        this.veranwortliche = new ArrayList<>();
+        this.verantwortliche = new ArrayList<>();
         this.pruefungen = new ArrayList<>();
+        this.studiengang = null;
+        this.semester = null;
+    }
+
+    public Modul(double note, boolean bestanden, int versuche, String name, int crp, List<Pruefung> pruefungen) {
+        this.note = note;
+        this.bestanden = bestanden;
+        this.versuche = versuche;
+        this.name = name;
+        this.crp = crp;
+        this.dozenten = new ArrayList<>();
+        this.verantwortliche = new ArrayList<>();
+        this.pruefungen = pruefungen;
         this.studiengang = null;
         this.semester = null;
     }
@@ -89,12 +102,12 @@ public class Modul {
         this.dozenten = dozenten;
     }
 
-    public List<Dozent> getVeranwortliche() {
-        return veranwortliche;
+    public List<Dozent> getVerantwortliche() {
+        return verantwortliche;
     }
 
-    public void setVeranwortliche(List<Dozent> veranwortliche) {
-        this.veranwortliche = veranwortliche;
+    public void setVerantwortliche(List<Dozent> verantwortliche) {
+        this.verantwortliche = verantwortliche;
     }
 
     public List<Pruefung> getPruefungen() {
@@ -126,7 +139,7 @@ public class Modul {
     }
 
     public void addVeranwortliche(Dozent veranwortliche){
-        this.veranwortliche.add(veranwortliche);
+        this.verantwortliche.add(veranwortliche);
     }
 
     public String toString() {

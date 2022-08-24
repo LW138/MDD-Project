@@ -83,6 +83,14 @@ public class Studiengang {
     }
 
     public String toString(){
+        String back = this.name;
+
+
+        return back;
+    }
+
+
+    public String toCompleteString(){
         String back = this.name + ": Fachbereich: " + this.fachbereich + "; Typ: " + this.typ + "; Verantworlicher: " + this.verantwortlicher.getName() + "; Regelstudienzeit: " + this.regelstudienzeit + "; Module: ";
 
         if(this.module.size() >= 1){

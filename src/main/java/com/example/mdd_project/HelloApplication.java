@@ -2,6 +2,7 @@ package com.example.mdd_project;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -9,11 +10,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.skin.TableColumnHeader;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -28,14 +27,29 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        List<String> titel = new ArrayList<>();
+
+
         Student student = new Student("Roth", "Joachiiim", "0157468466", "joachiiim.roth@zdh.thm.de", "5328884");
 
         List<Modul> modulListe = new ArrayList<>();
-        modulListe.add(new Modul(3.4, true, 1, "Mathematik fuer Informatiker 1", 5));
-        modulListe.add(new Modul(2.6, true, 1, "Gundlagen der Informatik 1", 5));
-        modulListe.add(new Modul(2.5, true, 1, "Algorithmen und Datenstrukturen", 5));
-        modulListe.add(new Modul(1.2, true, 1, "Gundlagen der Informatik 2", 5));
+
+        {
+            List<Pruefung> pruefungsListe = new ArrayList<>();
+            pruefungsListe.add(new Pruefung("20.04.2020", 3.4, true, "Klausur", 100));
+            modulListe.add(new Modul(3.4, true, 1, "Mathematik fuer Informatiker 1", 5, pruefungsListe));
+        }
+        {
+            List<Pruefung> pruefungsListe = new ArrayList<>();
+            modulListe.add(new Modul(2.6, true, 1, "Gundlagen der Informatik 1", 5, pruefungsListe));
+        }
+        {
+            List<Pruefung> pruefungsListe = new ArrayList<>();
+            modulListe.add(new Modul(2.5, true, 1, "Algorithmen und Datenstrukturen", 5, pruefungsListe));
+        }
+        {
+            List<Pruefung> pruefungsListe = new ArrayList<>();
+            modulListe.add(new Modul(1.2, true, 1, "Gundlagen der Informatik 2", 5, pruefungsListe));
+        }
 
         Modulliste module = new Modulliste(modulListe);
 
@@ -54,14 +68,19 @@ public class HelloApplication extends Application {
             if ("Algorithmen und Datenstrukturen".equals(m.getName())) {
                 semesterListe.get(semesterListe.size() - 1).addModul(m);
             }
+            if ("Gundlagen der Informatik 2".equals(m.getName())) {
+                semesterListe.get(semesterListe.size() - 1).addModul(m);
+            }
         }
 
         Semesterliste semester = new Semesterliste(semesterListe);
 
         List<Dozent> dozentenListe = new ArrayList<>();
-        titel.clear();
-        titel.add("Dr");
-        dozentenListe.add(new Dozent("Edelmann", "Renate", "", "renate.edelmann@mni.thm.de", titel));
+        {
+            List<String> titel = new ArrayList<>();
+            titel.add("Dr");
+            dozentenListe.add(new Dozent("Edelmann", "Renate", "", "renate.edelmann@mni.thm.de", titel));
+        }
         for (Modul m : modulListe) {
             if ("Mathematik fuer Informatiker 1".equals(m.getName())) {
                 dozentenListe.get(dozentenListe.size() - 1).addModul(m);
@@ -70,9 +89,11 @@ public class HelloApplication extends Application {
 
         for (Modul m : modulListe) {
         }
-        titel.clear();
-        titel.add("Dr");
-        dozentenListe.add(new Dozent("Hoffmann", "Benjamin", "", "benjamin.hoffmann@mni.thm.de", titel));
+        {
+            List<String> titel = new ArrayList<>();
+            titel.add("Dr");
+            dozentenListe.add(new Dozent("Hoffmann", "Benjamin", "", "benjamin.hoffmann@mni.thm.de", titel));
+        }
         for (Modul m : modulListe) {
             if ("Gundlagen der Informatik 1".equals(m.getName())) {
                 dozentenListe.get(dozentenListe.size() - 1).addModul(m);
@@ -81,25 +102,35 @@ public class HelloApplication extends Application {
 
         for (Modul m : modulListe) {
         }
-        titel.clear();
-        titel.add("Prof");
-        titel.add("Dr");
-        titel.add("nat");
-        titel.add("rer");
-        dozentenListe.add(new Dozent("Schultes", "Dominik", "", "dominik.schultes@mni.thm.de", titel));
+        {
+            List<String> titel = new ArrayList<>();
+            titel.add("Prof");
+            titel.add("Dr");
+            titel.add("nat");
+            titel.add("rer.");
+            dozentenListe.add(new Dozent("Schultes", "Dominik", "", "dominik.schultes@mni.thm.de", titel));
+        }
         for (Modul m : modulListe) {
             if ("Algorithmen und Datenstrukturen".equals(m.getName())) {
+                dozentenListe.get(dozentenListe.size() - 1).addModul(m);
+            }
+            if ("Gundlagen der Informatik 2".equals(m.getName())) {
                 dozentenListe.get(dozentenListe.size() - 1).addModul(m);
             }
         }
 
         for (Modul m : modulListe) {
             if ("Algorithmen und Datenstrukturen".equals(m.getName())) {
-                dozentenListe.get(dozentenListe.size() - 1).addModul(m);
+                dozentenListe.get(dozentenListe.size() - 1).addVerantwortlicheModule(m);
+            }
+            if ("Gundlagen der Informatik 2".equals(m.getName())) {
+                dozentenListe.get(dozentenListe.size() - 1).addVerantwortlicheModule(m);
             }
         }
-        titel.clear();
-        dozentenListe.add(new Dozent("Gumpfer", "Nils", "", "nils.gumpfer@mni.thm.de", titel));
+        {
+            List<String> titel = new ArrayList<>();
+            dozentenListe.add(new Dozent("Gumpfer", "Nils", "", "nils.gumpfer@mni.thm.de", titel));
+        }
         for (Modul m : modulListe) {
             if ("Gundlagen der Informatik 2".equals(m.getName())) {
                 dozentenListe.get(dozentenListe.size() - 1).addModul(m);
@@ -121,6 +152,9 @@ public class HelloApplication extends Application {
                 studiengangsListe.get(studiengangsListe.size() - 1).addModul(m);
             }
             if ("Algorithmen und Datenstrukturen".equals(m.getName())) {
+                studiengangsListe.get(studiengangsListe.size() - 1).addModul(m);
+            }
+            if ("Gundlagen der Informatik 2".equals(m.getName())) {
                 studiengangsListe.get(studiengangsListe.size() - 1).addModul(m);
             }
         }
@@ -169,8 +203,8 @@ public class HelloApplication extends Application {
         CheckComboBox checkComboBox = new CheckComboBox();
         ObservableList<String> strings = FXCollections.observableArrayList();
 
-        for (int i = 1; i <= 7; i++) {
-            strings.add(i + ". Semester");
+        for (Semester s : notenuebersicht.getSemester().getSemester()) {
+            strings.add(s.getName());
         }
 
         checkComboBox.getItems().addAll(strings);
@@ -178,7 +212,11 @@ public class HelloApplication extends Application {
 
 
         ChoiceBox<String> studiengangChoiceBox = new ChoiceBox<>();
-        ObservableList<String> options = FXCollections.observableArrayList("Softwaretechnologie", "Elektrotechnik");
+        ArrayList<String> observable = new ArrayList<>();
+        for(Studiengang sg : notenuebersicht.getStudiengaenge().getStudiengaenge()){
+            observable.add(sg.getName());
+        }
+        ObservableList<String> options = FXCollections.observableArrayList(observable);
         studiengangChoiceBox.setValue(options.get(0));
         studiengangChoiceBox.setItems(options);
 
@@ -208,16 +246,28 @@ public class HelloApplication extends Application {
 
         //new Modul(1.0, true, 1, "Modellgetriebene Softwareentwicklung", 5, d1, d1, studiengang, semester);
         TableView table = new TableView();
+        table.prefHeightProperty().bind(stage.heightProperty());
+        table.prefWidthProperty().bind(stage.widthProperty());
 
+        table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
         TableColumn gradeCol = new TableColumn("Note");
+
         TableColumn passedCol = new TableColumn("Bestanden");
+
         TableColumn attemptsCol = new TableColumn("Versuche");
+
         TableColumn modulenameCol = new TableColumn("Modulname");
+
         TableColumn crpCol = new TableColumn("CRP");
+
         TableColumn lecturerCol = new TableColumn("Dozent");
+
         TableColumn responsibleLecturerCol = new TableColumn("Verantwortlicher");
+
         TableColumn degreeCol = new TableColumn("Studiengang");
+
         TableColumn semesterCol = new TableColumn("Semester");
+
 
         gradeCol.setCellValueFactory(
                 new PropertyValueFactory<Student, String>("Note")
@@ -242,7 +292,7 @@ public class HelloApplication extends Application {
         );
 
         responsibleLecturerCol.setCellValueFactory(
-                new PropertyValueFactory<Student, String>("veranwortliche")
+                new PropertyValueFactory<Modul, String>("verantwortliche")
         );
 
         degreeCol.setCellValueFactory(
@@ -291,7 +341,7 @@ public class HelloApplication extends Application {
                                     // Set position of second window, related to primary window.
                                     newWindow.setX(stage.getX() + 200);
                                     newWindow.setY(stage.getY() + 100);
-
+                                    System.out.println(checkComboBox.getCheckModel().getCheckedItems());
                                     newWindow.show();
                                 }
                             }
@@ -317,6 +367,60 @@ public class HelloApplication extends Application {
         Text crp = new Text("Sum CRP: " + 67);
         summary.getChildren().addAll(anzahl, average, crp);
         summary.setSpacing(10);
+        ArrayList<Modul> allModules = new ArrayList<>();
+        System.out.println(checkComboBox.getCheckModel().getCheckedItems());
+        double averageGrade = 0.0;
+        int sum_crp = 0;
+        allModules.clear();
+        for(Modul m : notenuebersicht.getModule().getModule()){
+            for(Object s : checkComboBox.getCheckModel().getCheckedItems()){
+                if(m.getSemester() != null) {
+                    if (m.getSemester().getName().equals(s.toString())) {
+                        allModules.add(m);
+                        averageGrade = averageGrade + (m.getNote() * m.getCrp());
+                        sum_crp = sum_crp + m.getCrp();
+                    }
+                }
+            }
+
+        }
+        anzahl.setText("Module: " + allModules.size());
+        average.setText("AVG ⌀: " + Math.round(averageGrade / sum_crp * 100.0) / 100.0);
+        crp.setText("Credit Points: " + sum_crp);
+        System.out.println(allModules.size());
+
+        ObservableList<Modul> data2 = FXCollections.observableArrayList(allModules);
+        table.setItems(data2);
+        checkComboBox.getCheckModel().getCheckedItems().addListener(new ListChangeListener() {
+            @Override
+            public void onChanged(Change change) {
+                System.out.println(studiengangChoiceBox.getSelectionModel().getSelectedItem());
+                double averageGrade = 0.0;
+                int sum_crp = 0;
+                allModules.clear();
+                for(Modul m : notenuebersicht.getModule().getModule()){
+                    for(Object s : change.getList()){
+                        if((m.getSemester() != null) && m.getStudiengang().getName().equals(studiengangChoiceBox.getSelectionModel().getSelectedItem())) {
+                            if (m.getSemester().getName().equals(s.toString())) {
+                                allModules.add(m);
+                                averageGrade = averageGrade + (m.getNote() * m.getCrp());
+                                sum_crp = sum_crp + m.getCrp();
+                            }
+                        }
+                    }
+
+                }
+                anzahl.setText("Module: " + allModules.size());
+                average.setText("AVG ⌀: " + Math.round(averageGrade / sum_crp * 100.0) / 100.0);
+                crp.setText("Credit Points: " + sum_crp);
+                System.out.println(allModules.size());
+
+                ObservableList<Modul> data = FXCollections.observableArrayList(allModules);
+                table.setItems(data);
+            }
+        });
+
+
         borderPane.setBottom(summary);
 
         Scene scene = new Scene(borderPane, 1280, 720);
