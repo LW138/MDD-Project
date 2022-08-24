@@ -191,12 +191,7 @@ public class HelloApplication extends Application {
 
         Notenuebersicht notenuebersicht = new Notenuebersicht(student, module, semester, studiengaenge, dozenten);
 
-
-
-
-        ObservableList<Modul> data = FXCollections.observableArrayList(
-                notenuebersicht.getModule().getModule().get(0), notenuebersicht.getModule().getModule().get(1), notenuebersicht.getModule().getModule().get(3)
-        );
+        ObservableList<Modul> data = FXCollections.observableArrayList(notenuebersicht.getModule().getModule());
 
 
         BorderPane borderPane = new BorderPane();
@@ -270,25 +265,25 @@ public class HelloApplication extends Application {
 
 
         gradeCol.setCellValueFactory(
-                new PropertyValueFactory<Student, String>("Note")
+                new PropertyValueFactory<Modul, String>("note")
         );
         passedCol.setCellValueFactory(
-                new PropertyValueFactory<Student, String>("bestanden")
+                new PropertyValueFactory<Modul, String>("bestanden")
         );
         attemptsCol.setCellValueFactory(
-                new PropertyValueFactory<Student, String>("Versuche")
+                new PropertyValueFactory<Modul, String>("versuche")
         );
 
         modulenameCol.setCellValueFactory(
-                new PropertyValueFactory<Student, String>("name")
+                new PropertyValueFactory<Modul, String>("name")
         );
 
         crpCol.setCellValueFactory(
-                new PropertyValueFactory<Student, String>("crp")
+                new PropertyValueFactory<Modul, String>("crp")
         );
 
         lecturerCol.setCellValueFactory(
-                new PropertyValueFactory<Student, String>("dozenten")
+                new PropertyValueFactory<Modul, String>("dozenten")
         );
 
         responsibleLecturerCol.setCellValueFactory(
@@ -296,19 +291,19 @@ public class HelloApplication extends Application {
         );
 
         degreeCol.setCellValueFactory(
-                new PropertyValueFactory<Student, String>("pruefungen")
+                new PropertyValueFactory<Modul, String>("studiengang")
         );
 
         semesterCol.setCellValueFactory(
-                new PropertyValueFactory<Student, String>("semester")
+                new PropertyValueFactory<Modul, String>("semester")
         );
 
         Callback<TableColumn, TableCell> cellFactory =
                 new Callback<TableColumn, TableCell>() {
                     public TableCell call(TableColumn p) {
-                        TableCell cell = new TableCell<Person, String>() {
+                        TableCell cell = new TableCell<Modul, ArrayList>() {
                             @Override
-                            public void updateItem(String item, boolean empty) {
+                            public void updateItem(ArrayList item, boolean empty) {
                                 super.updateItem(item, empty);
                                 setText(empty ? null : getString());
                                 setGraphic(null);
@@ -326,16 +321,69 @@ public class HelloApplication extends Application {
                                     System.out.println("double clicked!");
                                     TableCell c = (TableCell) event.getSource();
                                     System.out.println("Cell text: " + c.getText());
-                                    Label secondLabel = new Label("I'm a Label on new Window");
+                                    TableView table = new TableView();
+                                    table.prefHeightProperty().bind(stage.heightProperty());
+                                    table.prefWidthProperty().bind(stage.widthProperty());
+
+                                    ArrayList<Dozent> dz = new ArrayList<>();
+
+                                    for (Dozent d : notenuebersicht.getDozenten().getDozenten()) {
+                                        if (c.getText().contains(d.getName()) && c.getText().contains(d.getVorname())) {
+                                            dz.add(d);
+                                        }
+                                    }
+
+                                    ObservableList<Dozent> dzn = FXCollections.observableArrayList(dz);
+
+
+                                    table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+                                    TableColumn titleCol = new TableColumn("Titel");
+                                    TableColumn firstNameCol = new TableColumn("Name");
+                                    TableColumn lastNameCol = new TableColumn("Vorname");
+                                    TableColumn teleCol = new TableColumn("Telefonnummer");
+                                    TableColumn emailCol = new TableColumn("E-Mail");
+                                    TableColumn moduleCol = new TableColumn("Module");
+                                    TableColumn responsibleModulesCol = new TableColumn("Verantwortliche Module");
+
+                                    titleCol.setCellValueFactory(
+                                            new PropertyValueFactory<Dozent, String>("titel")
+                                    );
+
+                                    moduleCol.setCellValueFactory(
+                                            new PropertyValueFactory<Dozent, String>("module")
+                                    );
+
+                                    responsibleModulesCol.setCellValueFactory(
+                                            new PropertyValueFactory<Dozent, String>("verantwortlicheModule")
+                                    );
+
+                                    lastNameCol.setCellValueFactory(
+                                            new PropertyValueFactory<Person, String>("name")
+                                    );
+
+                                    firstNameCol.setCellValueFactory(
+                                            new PropertyValueFactory<Person, String>("vorname")
+                                    );
+
+                                    teleCol.setCellValueFactory(
+                                            new PropertyValueFactory<Person, String>("telnummer")
+                                    );
+
+                                    emailCol.setCellValueFactory(
+                                            new PropertyValueFactory<Person, String>("email")
+                                    );
+
+                                    table.getColumns().addAll(titleCol, firstNameCol, lastNameCol, emailCol, teleCol, moduleCol, responsibleModulesCol);
+                                    table.setItems(dzn);
 
                                     StackPane secondaryLayout = new StackPane();
-                                    secondaryLayout.getChildren().add(secondLabel);
+                                    secondaryLayout.getChildren().add(table);
 
                                     Scene secondScene = new Scene(secondaryLayout, 230, 100);
 
                                     // New window (Stage)
                                     Stage newWindow = new Stage();
-                                    newWindow.setTitle("Second Stage");
+                                    newWindow.setTitle("Dozent");
                                     newWindow.setScene(secondScene);
 
                                     // Set position of second window, related to primary window.
@@ -350,7 +398,10 @@ public class HelloApplication extends Application {
                     }
                 };
 
-        modulenameCol.setCellFactory(cellFactory);
+        //modulenameCol.setCellFactory(cellFactory);
+        lecturerCol.setCellFactory(cellFactory);
+        //responsibleLecturerCol.setCellFactory(cellFactory2);
+        //degreeCol.setCellFactory(cellFactory3);
 
         table.getColumns().addAll(gradeCol, passedCol, attemptsCol, modulenameCol, crpCol, lecturerCol, responsibleLecturerCol, degreeCol, semesterCol);
 

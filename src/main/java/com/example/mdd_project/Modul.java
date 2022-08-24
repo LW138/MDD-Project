@@ -157,7 +157,7 @@ public class Modul {
 
         back += " Verantwortliche: ";
 
-        for (Dozent d : this.veranwortliche) {
+        for (Dozent d : this.verantwortliche) {
             back += d.getName() + ", ";
         }
 
